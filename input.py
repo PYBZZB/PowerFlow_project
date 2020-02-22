@@ -24,36 +24,35 @@ class RE(list):
         self._s = list(map(lambda s : re.split(r'\,\s*',s),self._s))
         #function to check whether the input is legal
         if len(self._s[0]) != 1:
-            raise IOError('First line does not have more than one arguments')
+            raise ValueError('First line does not have more than one arguments')
         for i in range(1,len(self._s)):
             if len(self._s[i]) == 4:
                 __ID = int(self._s[i][0])
                 __Type = self._s[i][1]
                 if __Type == 'PQ':
-                    self.Nodes.update({__ID:True})
+                    self.Nodes.update({__ID:'PQ'})
                 elif __Type == 'PV':
-                    self.Nodes.update({__ID:True})
+                    self.Nodes.update({__ID:'PV'})
                 elif __Type == 'V':
-                    self.Nodes.update({__ID:True})
+                    self.Nodes.update({__ID:'V'})
                 else:
-                    raise IOError('Node %d input error or branch %d lost an argument' % (__ID,__ID)) 
+                    raise ValueError('Node %d input error or branch %d lost an argument' % (__ID,__ID)) 
             elif len(self._s[i]) == 5:
                 __ID = int(self._s[i][0])
-                __Type = self._s[i][1]
                 __n1 = int(self._s[i][1])
                 __n2 = int(self._s[i][2])
                 if __n1 in self.Nodes:
                     if __n2 in self.Nodes:
                         pass
                     else:
-                        raise IOError('Node %d does\'t exist (in branch %d)' % (__n2,__ID))
+                        raise ValueError('Node %d does\'t exist (in branch %d)' % (__n2,__ID))
                 else:
                     if __n2 in self.Nodes:
-                        raise IOError('Node %d does\'t exist (in branch %d)' % (__n1,__ID))
+                        raise ValueError('Node %d does\'t exist (in branch %d)' % (__n1,__ID))
                     else:
-                        raise IOError('Node %d,%d does\'t exist (in branch %d)' % (__n1,__n2,__ID))
+                        raise ValueError('Node %d,%d does\'t exist (in branch %d)' % (__n1,__n2,__ID))
             else:
-                raise IOError(self._s[i],'is illegal')
+                raise ValueError(self._s[i],'is illegal')
     def __str__(self):
         return '%s' % self._s
     __repr__ = __str__
